@@ -16,7 +16,7 @@ This assignment will teach you how to implement a Binary Search Tree and use it 
 
 ### Deadlines
 
-This PA is due on ** **Wednesday, May 19** **
+This PA is due on ** **Wednesday, May 26** **
 
 ## CSE Mantra: *Start early, start often!*
 
