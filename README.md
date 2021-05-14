@@ -160,6 +160,8 @@ This method should create a FileData object with the given file information and 
 
 Here is another example: Let File1 be `mySample1.txt, /root, 2021/02/01` and File2 be `mySample1.txt, /root, 2023/02/01`. Before we add File2, assume that we already have File1 in the `FileSystem`. In this situation, check which file is the most recent. If the original file was more recent, keep it and do not change the trees. If the new file is more recent, update `nameTree` and `dateTree`. Note that `dateTree` now has a new key and needs to be removed from the original list. In this example, before we add File2, `dateTree` should have “2021/02/01” as the key and File1 in the value. Since File2 has the same name as File1 but a more recent date, File1 should be removed from the ArrayList associated with the date “2021/02/01” and File2 should be added to the ArrayList associated with the date “2023/02/01”. 
 
+Note that since we are using yyyy/mm/dd as our date format now, you can use Java's `compareTo()` method to compare two dates and determine which one is more recent. To read more on the usage of `compareTo()`, see [this documentation](https://docs.oracle.com/en/java/javase/15/docs/api/java.base/java/lang/String.html#compareTo(java.lang.String)).
+
 If the `name`, `dir`, or `date` is `null`, then do not add anything to the FileSystem.
 
 Follow this table for further clarification on when to add or update the trees
