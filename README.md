@@ -250,9 +250,9 @@ mySample2.txt, /user, 2021/02/06
 Example Output:
 
 ```
-["02/06/2021: {Name: mySample2.txt, Directory: /user, Modified Date: 2021/02/06}", 
-"02/01/2021: {Name: mySample1.txt, Directory: /root, Modified Date: 2021/02/01}", 
-"02/01/2021: {Name: mySample.txt, Directory: /home, Modified Date: 2021/02/01}"]
+["2021/02/06: {Name: mySample2.txt, Directory: /user, Modified Date: 2021/02/06}", 
+"2021/02/01: {Name: mySample1.txt, Directory: /root, Modified Date: 2021/02/01}", 
+"2021/02/01: {Name: mySample.txt, Directory: /home, Modified Date: 2021/02/01}"]
 ```
 
  <hr />
