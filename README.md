@@ -5,18 +5,16 @@ tags: CSE12WI21
 
 ---
 
-# PA7: Binary Search Trees (closed)
+# PA7: Binary Search Trees
 
 ---
-
-**This assignment is closed to collaboration.**
 
 This assignment will teach you how to implement a Binary Search Tree and use it to order and filter data from a text file. 
 
 
 ### Deadlines
 
-This PA is due on ** **Wednesday, May 26** **
+This PA is due on ** **Wednesday, May 24** **
 
 ## CSE Mantra: *Start early, start often!*
 
@@ -25,7 +23,7 @@ This PA is due on ** **Wednesday, May 26** **
 
 ## Getting the Code
 
-The starter code is in the Github repository that you are currently looking at. If you are not familiar with Github, here are two easy ways to get your code.
+The starter code is here: https://github.com/ucsd-cse12-sp22/cse12-pa7-BST. If you are not familiar with Github, here are two easy ways to get your code.
 
 1. Download as a ZIP folder 
 
@@ -310,15 +308,6 @@ On this PA, **most guidelines must be followed**, they are summarized below:
 - Test method must have meaningful names
 - Helper method must have meaningful names
 - magic numbers
-
-## Asking for Help
-
-This is a **closed** PA. That said, there are many ways to ask for related help:
-
-- Ask anything as a private Piazza question (though you are not guaranteed a detailed answer)
-- PA6 is still open, and you can learn a lot by completing PA6 fully. You can do all of the `BST` methods without thinking about PA6, but it's a great idea to get detailed help on PA6 before tackling the methods in PA7 if you don't have a complete PA6
-- You can always ask for clarification about built-in Java libraries
-- You can always ask for clarification and help with the BST implementations we work through in class
 
 ## Submitting
 
