@@ -171,16 +171,34 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		if (node.key.compareTo(key) > 0) {
 			
 			node.left = removeHelper(node.left, key);
+			if (node.left == null) {
+				return null;
+			}
+			if (node.left.key.compareTo(key)==0) {
+				node.left = null;
+			}
+			return node.left;
 		} 
+		
 		else if (node.key.compareTo(key) < 0){
 			  node.right = removeHelper(node.right, key);
+			  if (node.right == null) {
+				  return null;
+			  }
+			  if (node.right.key.compareTo(key)==0) {
+				  node.right = null;
+			  }
+			  return node.right;
 		}
 		// node has the key we're looking to remove
 		else {
-			if(size == 1) {
+			if (size == 1) {
 				this.root = null;
 			}
-		// Case: node with only one child or no children 
+		// Case: node with only one child or no children
+			if (node.right == null && node.left == null) {
+
+			}
 			if (node.left == null){
 				return node.right;
 			}
