@@ -179,7 +179,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 			}
 			return node.left;
 		} 
-
+		
 		else if (node.key.compareTo(key) < 0){
 			  node.right = removeHelper(node.right, key);
 			  if (node.right == null) {
@@ -195,27 +195,29 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 			if (size == 1) {
 				this.root = null;
 			}
-			if (root.right != null && root.left != null) {
+		// Case: node with only one child or no children
+			if (node.right == null && node.left == null) {
+
+			}
+			if (node.left == null){
+				return node.right;
+			}
+		
+			else if (node.right == null){ 
+				return node.left;
+			}
+
 		// Case: node with two children
-			// Get minimum from right subtree, then remove it
+		// Get minimum from right subtree, then remove it
 			Node<K, V> nextLargest = nodeWithMinimumKey(node.right); //see method in our posted source code  node.key = nextLargest.key;
 			node.key = nextLargest.key;
 			node.value = nextLargest.value;
 
-			// Remove nextLargest node
+		// Remove nextLargest node
 			node.right = removeHelper(node.right, node.key);
-			}
-		// Case: node with only one child or no children
-			else if (node.left == null) {
-				return node.right;
-			}
-		
-			else if (node.right == null) { 
-				return node.left;
 			}
 			return node;
 		}
-	}
 
 	
 
