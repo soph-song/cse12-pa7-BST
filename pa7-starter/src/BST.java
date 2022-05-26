@@ -11,6 +11,7 @@ import java.util.Stack;
 public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V> {
 	Node<K,V> root;
 	int size;
+	List<K> keys = new ArrayList<>();
 
 	public BST() {
 		this.root = null;
@@ -153,10 +154,13 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	}
 
 	public Node findNode(Node root, K key) {
-		if (root.key.equals(key)) {
+		if (root == null) {
+			return null;
+		}
+		else if (root.key.equals(key)) {
 			return root;
 		}
-		if (root.key.compareTo(key) > 0) {
+		else if (root.key.compareTo(key) > 0) {
 			findNode(root.left,key);
 		}
 		else if (root.key.compareTo(key) < 0) {
@@ -197,11 +201,30 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	}
 
 
+	public Node addKEY(Node<K,V> root) {
+		//if we find a leaf
+		if (root.right == null && root.left == null) {
+			keys.add(root.getKey());
+			return root;
+		}
+		//if root has left child
+		if (root.left != null) {
+			root.left = addKEY(root.left);
+			keys.add(root.getKey());
+		}
+
+		//if root has right child
+		if (root.right != null) {
+			root.right = addKEY(root.right);
+		}
+		return root;
+	}
 	// Keys must be in ascending sorted order
 	// You CANNOT use Collections.sort() or any other sorting implementations
 	// You must do inorder traversal of the tree
 	@Override
 	public List<K> keys() {
+		addKEY(root);
 		return this.keys;
 	}
 	
