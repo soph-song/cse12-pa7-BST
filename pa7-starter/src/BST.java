@@ -9,251 +9,420 @@ import java.util.Stack;
  * @param <V> The type of the values of this BST. 
  */
 public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V> {
-	Node<K,V> root;
+	Node<K,V> root; 
 	int size;
-	List<K> keys = new ArrayList<>();
+	V value;
 
-	public BST() {
+	BST() {
 		this.root = null;
-		size = 0;
+		this.size = 0;
+		this.value = null;
 	}
 
-	public BST(Node<K,V> root) {
-		this.root = root;
-		size = 1;
-
-	}
-
-	public Node add(Node<K,V> root, K key, V value) {
-		//if we find an empty slot, add the node
-		if (root == null) {
-			root = new Node<K,V>(key, value, null, null);
-			size += 1;
-			return root;
-		}
-		//Check if root key is > new key
-		else if (root.key.compareTo(key) > 0) {
-			root.left = add(root.left, key, value);
-		}
-		// if keys are the same then update value
-		else if (root.key.compareTo(key) == 0) {
-			root.setValue(value);
-			return root;
-		}
-		//if root key is less than new key
-		else if (root.key.compareTo(key) < 0) {
-			root.right = add(root.right, key, value);
-		}
-		return root;
-	}
-
-	@Override
-	public boolean put(K key, V value) throws IllegalArgumentException {
-		if (key == null) {
-			throw new IllegalArgumentException(ILLEGAL_ARG_NULL_KEY);
-		}
-		//Check for duplicate keys
-		if (containsKey(key) == true) {
-			return false;
-		}
-		Node nodeAdded = add(root, key, value);
+	BST(V value) {
+		this.root = null;
+		this.value = value;
+		this.size = 0;
 		
-		return nodeAdded.getKey() == key;
 	}
 
+	
+	/**
+	 * Adds the specified key, value pair to this DefaultMap
+	 * Note: duplicate keys are not allowed
+	 * 
+	 * @return true if the key value pair was added to this DefaultMap
+	 * @throws IllegalArgumentException if the key is null
+	 */
+	
+	@Override
+	public boolean put(K key, V value) throws IllegalArgumentException {   //the method doesn't successfully add the node
+		// TODO Auto-generated method stub
+		//Boolean result = false;
+		if(key == null) {
+			throw new IllegalArgumentException("key is null");
+		}
+		
+	
+		Node<K,V> cur = this.root;
+		
+		if(cur == null) {
+			Node<K,V> node = new Node<K, V>(key, value, null, null);
+			root = node;
+			size++;
+			return true;
+		}
+		
+	//	Node<K,V> newNode = this.root;
+		
+		
+		  while(cur != null) {
+			if(key.compareTo(cur.key) > 0) {
+				if(cur.right == null) {  
+					cur.right = new Node<K,V>(key, value, null, null);
+					size++;
+					break;
+				}
+	
+				else {
+					cur = cur.right;
+					continue;
+				}
+			}
+			
+			
+			if(key.compareTo(cur.key) < 0) {
+				if(cur.left == null) {      //add the node if the right is null 
+					cur.left = new Node<K,V>(key, value, null, null);
+					size++;
+					break;
+				}
+				
+				else {
+					cur = cur.left; 
+				}
+			}
+			
+			else {
+				return false;
+			}
+			
+		 }
+	
+		
+		return true;
+	}
+
+	
+	/**
+	 * Replaces the value that maps to the key if it is present
+	 * @param key The key whose mapped value is being replaced
+	 * @param newValue The value to replace the existing value with
+	 * @return true if the key was in this DefaultMap
+	 * @throws IllegalArgumentException if the key is null
+	 */
+	
 	@Override
 	public boolean replace(K key, V newValue) throws IllegalArgumentException {
-		if (key == null) {
-			throw new IllegalArgumentException(ILLEGAL_ARG_NULL_KEY);
+		// TODO Auto-generated method stub
+		if(key == null) {
+			throw new IllegalArgumentException("key is null");
 		}
-		//If key not present return and exit
-		if (containsKey(key)== false) {
+		
+	//	Node<K,V> newNode = new Node<K, V>(key, newValue, null,null);
+	//	Node<K,V> cur = this.root;
+		
+		if(!containsKey(key)) {    //if the key isn't present, add to the map
+			this.put(key, newValue);
 			return false;
 		}
-		Node nodeReplced = add(root,key,newValue);
-
-		return nodeReplced.getValue()==newValue;
-	}
-
-	public Node remove(Node root, K key) {
-		if (root == null) {
-			return null;
-		}
-		//if node is on the left
-		else if (root.key.compareTo(key) > 0) {
-			root.left = remove(root.left, key);
-		}
-		//if node on right
-		else if (root.key.compareTo(key) < 0) {
-			root.right = remove(root.right, key);
-		}
-		//if we found our node
-		else if (root.key.compareTo(key) == 0) {
-
-			size -= 1;
-
-			//If it has both child
-			if (root.left != null && root.right!= null) {
-				Node maxNode = findMaxNode(root.left);
-				root.setValue(maxNode.getValue());
-				root.key = maxNode.key;
-				root.left = remove(root.left, (K) maxNode.getKey());
-				return root;
+		
+		if(containsKey(key)) {
+			if(key.equals(root.key)) {
+				root.value = newValue;
+				return true; 
 			}
 			
-			//If it has only left child
-			else if (root.left != null) {
-				return root.left;
-			}
-			//If it has only right child
-			else if (root.right != null) {
-				return root.left;
-			}
-			//If it has no child
-			else if (root.left == null && root.right == null) {
-				return null;
+			if(key.compareTo(root.key) > 0) {
+				if(root.right == null) {  
+					return false;
+				}
+				
+				else {
+					root = root.right;
+					this.replace(key, newValue);
+				}
 			}
 			
+			if(key.compareTo(root.key) < 0) {
+				if(root.left == null) {  
+					return false;
+				}
+				
+				else {
+					root = root.left;
+					this.replace(key, newValue);
+				}
+			}
 		}
-		return root;
+		return false;
 	}
-	public Node findMaxNode(Node root) {
-		if (root.right != null) {
-			return findMaxNode(root.right);
+	
+	/**
+	 * Remove the entry corresponding to the given key
+	 * 
+	 * @return true if an entry for the given key was removed
+	 * @throws IllegalArgumentException if the key is null
+	 */
+	
+	private Node<K, V> nodeWithMinimumKey(Node<K, V> root){ 
+    	Node<K, V> minimum = root; 
+        while (root.left != null){ 
+            minimum = root.left; 
+            root = root.left; 
+        } 
+        return minimum; 
+    }
+	
+	private Node<K, V> removeHelper(Node<K, V> node, K key) throws IllegalArgumentException{
+		// If tree is empty
+		if (node == null) { return null; }
+  
+		if (node.key.compareTo(key) > 0) {
+			
+			node.left = removeHelper(node.left, key);
+		} 
+		else if (node.key.compareTo(key) < 0){
+			  node.right = removeHelper(node.right, key);
 		}
+		// node has the key we're looking to remove
 		else {
-			return root;
+		// Case: node with only one child or no children 
+			if (node.left == null){
+				return node.right;
+			}
+		
+			else if (node.right == null){ 
+				return node.left;
+			}
+
+		// Case: node with two children
+		// Get minimum from right subtree, then remove it
+			Node<K, V> nextLargest = nodeWithMinimumKey(node.right); //see method in our posted source code  node.key = nextLargest.key;
+			node.key = nextLargest.key;
+			node.value = nextLargest.value;
+
+		// Remove nextLargest node
+			node.right = removeHelper(node.right, node.key);
+			}
+				return node;
 		}
-	}
+
+	
 
 	@Override
 	public boolean remove(K key) throws IllegalArgumentException {
-		if (key == null) {
-			throw new IllegalArgumentException(ILLEGAL_ARG_NULL_KEY);
+		// TODO Auto-generated method stub
+		if(key == null) {
+			throw new IllegalArgumentException("key is null");
 		}
-		if (containsKey(key) == false) {
-			return false;
-		}
-		remove(root, key);
+		
+		
+	//	Node<K,V> cur = this.root;
 
-		return containsKey(key);
+		if(containsKey(key)) {
+			root = this.removeHelper(root, key);
+			return true;
+		}
+		
+		return false;
+		
+		/*
+        int initialsize = this.keys().size();
+        this.removeHelper(this.root, key);
+        size--;
+        if(initialsize == this.keys().size()) {
+        	return false;
+        }
+	
+		*/
+		//return true;
 	}
+	
+	
+	/**
+	 * Adds the key, value pair to this DefaultMap if it is not present,
+	 * otherwise, replaces the value with the given value
+	 * @throws IllegalArgumentException if the key is null
+	 */
 
 	@Override
 	public void set(K key, V value) throws IllegalArgumentException {
-		if (key == null) {
-			throw new IllegalArgumentException(ILLEGAL_ARG_NULL_KEY);
-		}
-		if (containsKey(key) == true) {
-			replace(key, value);
-		}
-		else if (containsKey(key) == false) {
-			put(key, value);
+		// TODO Auto-generated method stub
+		if(key == null) {
+			throw new IllegalArgumentException("key is null");
 		}
 		
+		Node<K,V> cur = this.root;
+	
+		if(cur == null) {
+			this.put(key, value);
+		}
+		
+		else {
+		
+		if(key.compareTo(cur.key) > 0) {
+			cur = cur.right;
+		//	this.set(key, value);
+		}
+		
+		if(key.compareTo(cur.key) < 0) {
+			cur = cur.left;
+		//	this.set(key, value);
+		}
+		
+		else {
+			cur.value = value;
+		}
+		
+		}
 	}
-
-	public Node findNode(Node root, K key) {
-		if (root == null) {
-			return null;
-		}
-		else if (root.key.equals(key)) {
-			return root;
-		}
-		else if (root.key.compareTo(key) > 0) {
-			findNode(root.left,key);
-		}
-		else if (root.key.compareTo(key) < 0) {
-			findNode(root.right,key);
-		}
-		return null;
-	}
+	
+	
+	/**
+	 * @return the value corresponding to the specified key
+	 * @throws IllegalArgumentException if the key is null
+	 */
 
 	@Override
 	public V get(K key) throws IllegalArgumentException {
-		if (key == null) {
-			throw new IllegalArgumentException(ILLEGAL_ARG_NULL_KEY);
+		// TODO Auto-generated method stub
+		if(key == null) {
+			throw new IllegalArgumentException("key is null");
 		}
-		if (containsKey(key) == false) {
-			return null;
-		}
-		Node target = findNode(root,key);
-		V value = (V) target.getValue();
-		return value;
+		
+		Node<K,V> cur = this.root;
+		
+		 while(cur != null) {
+				if(key.compareTo(cur.key) > 0) {
+					if(cur.right == null) {     
+						break;
+					}
+					
+					else {
+						cur = cur.right;
+					}
+				}
+				
+				if(key.compareTo(cur.key) < 0) {
+					if(cur.left == null) {
+						break;
+					}
+					
+					else {
+						cur = cur.left;
+					}
+				}
+			
+				else {
+					return cur.value;
+				}
+			
+		 }
+		return null;
 	}
 
+	/**
+	 * 
+	 * @return The number of (key, value) pairs in this DefaultMap
+	 */
+	
 	@Override
 	public int size() {
+		// TODO Auto-generated method stub
+	
 		return this.size;
+		
 	}
 
+	/**
+	 * 
+	 * @return true iff this.size() == 0 is true
+	 */ 
+	
 	@Override
 	public boolean isEmpty() {
-		return this.size == 0;
+		// TODO Auto-generated method stub
+		if(this.size() == 0) {
+			return true;
+		}
+		
+		return false;
 	}
 
+	
+	/**
+	 * @return true if the specified key is in this DefaultMap
+	 * @throws IllegalArgumentException if the key is null
+	 */
+	
 	@Override
 	public boolean containsKey(K key) throws IllegalArgumentException {
-		if (key == null) {
-			throw new IllegalArgumentException(ILLEGAL_ARG_NULL_KEY);
+		// TODO Auto-generated method stub
+		if(key == null) {
+			throw new IllegalArgumentException("key is null");
 		}
-		return findNode(root,key) != null;
+		
+		
+		return get(key) != null;
 	}
 
-
-	public Node addKEY(Node<K,V> root) {
-		//if we find a leaf
-		if (root.right == null && root.left == null) {
-			keys.add(root.getKey());
-			return root;
-		}
-		//if root has left child
-		if (root.left != null) {
-			root.left = addKEY(root.left);
-			keys.add(root.getKey());
-		}
-
-		//if root has right child
-		if (root.right != null) {
-			root.right = addKEY(root.right);
-		}
-		return root;
-	}
 	// Keys must be in ascending sorted order
 	// You CANNOT use Collections.sort() or any other sorting implementations
 	// You must do inorder traversal of the tree
+	
+	/**
+	 * 
+	 * @return an array containing the keys of this DefaultMap. If this DefaultMap is 
+	 * empty, returns array of length zero. 
+	 */
+	
+	
+	private void inOrder(Node<K,V> node, List l){
+		  if(node==null) {
+		   return;
+		  }
+		  inOrder(node.left,l);
+		  l.add(node.key);
+		  inOrder(node.right,l);
+		 }
+	
 	@Override
 	public List<K> keys() {
-		addKEY(root);
-		return this.keys;
-	}
+		// TODO Auto-generated method stub
+		
+		ArrayList<K> list = new ArrayList<>();
+		inOrder(this.root,list);
 	
+		
+		return list;
+	}
 	private static class Node<K extends Comparable<? super K>, V> 
 								implements DefaultMap.Entry<K, V> {
+		/* 
+		 * TODO: Add instance variables
+		 * 
+		 */
 		K key;
-		V value;
+		V value; 
 		Node<K,V> left;
-		Node<K,V> right;
-
+		Node<K,V> right; 
+	
+		
 		public Node(K key, V value, Node<K,V> left, Node<K,V> right) {
 			this.key = key;
 			this.value = value;
 			this.left = left;
 			this.right = right;
 		}
+		
+		
 
 		@Override
 		public K getKey() {
+			// TODO Auto-generated method stub
 			return key;
 		}
 
 		@Override
 		public V getValue() {
+			// TODO Auto-generated method stub
 			return value;
 		}
 
 		@Override
 		public void setValue(V value) {
+			// TODO Auto-generated method stub
 			this.value = value;
 			
 		}
