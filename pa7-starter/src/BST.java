@@ -177,6 +177,9 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		}
 		// node has the key we're looking to remove
 		else {
+			if(size == 1) {
+				this.root = null;
+			}
 		// Case: node with only one child or no children 
 			if (node.left == null){
 				return node.right;
@@ -195,7 +198,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		// Remove nextLargest node
 			node.right = removeHelper(node.right, node.key);
 			}
-				return node;
+			return node;
 		}
 
 	
@@ -209,9 +212,13 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		
 		
 	//	Node<K,V> cur = this.root;
+		if (this.root == null) {
+			return false;
+		}
 
 		if(containsKey(key)) {
 			root = this.removeHelper(root, key);
+			size--;
 			return true;
 		}
 		
