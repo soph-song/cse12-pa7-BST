@@ -196,10 +196,10 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 				this.root = null;
 			}
 		// Case: node with only one child or no children
-			if (node.right == null && node.left == null) {
-
+			if (node.left == null && node.right == null) {
+				return null;
 			}
-			if (node.left == null){
+			else if (node.left == null){
 				return node.right;
 			}
 		
