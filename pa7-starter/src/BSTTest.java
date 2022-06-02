@@ -11,7 +11,25 @@ public class BSTTest {
 	
 	/* TODO: Add your own tests */
 	@Test
-	public void dummyTest() {
-		
+	public void test_basics() {
+		BST testBST = new BST<>();
+		testBST.put("key1","1");
+		assertEquals("1",testBST.get("key1"));
+		assertEquals(1,testBST.size());
+		assertEquals(true,testBST.containsKey("key1"));
+		assertEquals(false,testBST.containsKey("non-exist-key"));
+
+		testBST.replace("key1","2");
+		assertEquals("2",testBST.get("key1"));
+
+		testBST.remove("key1");
+		assertEquals(true,testBST.isEmpty());
+
+	}
+
+	@Test
+	public void test_remove() {
+		BST bst = new BST<>();
+
 	}
 }
