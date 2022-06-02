@@ -199,9 +199,11 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 			if (size == 2 || size == 3) {
 				if (node.right != null) {
 					this.root = new Node(node.right.key,node.right.value,root.left,node.right.right);
+					return root;
 				}
 				else {
 					this.root = new Node(node.left.key,node.left.value,node.left.left,node.left.right);
+					return root;
 				}
 			}
 		// Case: node with only one child or no children
