@@ -75,7 +75,7 @@ public class FileSystem {
 
         }
         //if file not present
-        else if (!nameTree.containsKey(name)) {
+        else  {
             nameTree.put(name,value);
             ArrayList<FileData> Val = new ArrayList<>();
             Val.add(value);
