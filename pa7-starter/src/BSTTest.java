@@ -30,6 +30,14 @@ public class BSTTest {
 	@Test
 	public void test_remove() {
 		BST bst = new BST<>();
+		bst.put("a",null);
+		bst.put("b",null);
+		bst.put("c",null);
+		bst.put("d",null);
+
+		bst.remove("b");
+		System.out.println(bst.keys().toString());
+		//assertEquals(,bst.keys().toString())
 
 	}
 }
