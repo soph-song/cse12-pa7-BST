@@ -35,9 +35,10 @@ public class BSTTest {
 		bst.put("c",null);
 		bst.put("d",null);
 
-		bst.remove("b");
+		bst.remove("c");
+		System.out.println(bst.size);
 		System.out.println(bst.keys().toString());
-		//assertEquals(,bst.keys().toString())
+		assertEquals("[a, b, d]", bst.keys().toString());
 
 	}
 }

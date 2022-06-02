@@ -155,7 +155,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 * @throws IllegalArgumentException if the key is null
 	 */
 	
-	private Node<K, V> nodeWithMinimumKey(Node<K, V> root){ 
+	private Node<K, V> MinNode(Node<K, V> root){ 
     	Node<K, V> minimum = root; 
         while (root.left != null){ 
             minimum = root.left; 
@@ -170,63 +170,58 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
   
 		if (node.key.compareTo(key) > 0) {
 			
-			node.left = removeHelper(node.left, key);
-			if (node.left == null) {
+			Node<K,V> temp = removeHelper(node.left, key);
+			if (temp == null) {
 				return null;
 			}
-			if (node.left.key.compareTo(key)==0) {
+			if (temp.key.compareTo(key)==0) {
 				node.left = null;
 			}
-			return node.left;
+			return temp;
 		} 
 		
 		else if (node.key.compareTo(key) < 0){
-			  node.right = removeHelper(node.right, key);
-			  if (node.right == null) {
+			  Node<K,V> temp= removeHelper(node.right, key);
+			  if (temp == null) {
 				  return null;
 			  }
-			  if (node.right.key.compareTo(key)==0) {
+			  if (temp.key.compareTo(key)==0) {
 				  node.right = null;
 			  }
-			  return node.right;
+			  return temp;
 		}
 		// node has the key we're looking to remove
 		else {
 			if (size == 1) {
 				this.root = null;
 			}
-			//if root with child
-			if (size == 2 || size == 3) {
-				if (node.right != null) {
-					this.root = new Node(node.right.key,node.right.value,root.left,node.right.right);
-					return root;
-				}
-				else {
-					this.root = new Node(node.left.key,node.left.value,node.left.left,node.left.right);
-					return root;
-				}
+			if (node.left != null && node.right != null) {
+				Node<K,V> minNode = MinNode(node.right);
+				node.key =(K) minNode.key;
+				node.value = (V) minNode.value;
+				removeHelper(node.right, minNode.key);
 			}
-		// Case: node with only one child or no children
-			if (node.left == null && node.right == null) {
-				return null;
+			else if (node.left != null) {
+				node.key = node.left.key;
+				node.value = node.left.value;
+				node.left = node.left.left;
+				node.right = node.left.right;
+				size--;
+
 			}
-			else if (node.left == null){
-				return node.right;
+			else if (node.right != null) {
+				node.key = node.right.key;
+				node.value = node.right.value;
+				node.left = node.right.left;
+				node.right = node.right.right;
+				size--;
+
 			}
-		
-			else if (node.right == null){ 
-				return node.left;
+			else {
+				return node;
 			}
 
-		// Case: node with two children
-		// Get minimum from right subtree, then remove it
-			Node<K, V> nextLargest = nodeWithMinimumKey(node.right); //see method in our posted source code  node.key = nextLargest.key;
-			node.key = nextLargest.key;
-			node.value = nextLargest.value;
-
-		// Remove nextLargest node
-			node.right = removeHelper(node.right, node.key);
-			}
+		}
 			return node;
 		}
 
@@ -246,8 +241,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		}
 
 		if(containsKey(key)) {
-			root = this.removeHelper(root, key);
-			size--;
+			this.removeHelper(root, key);
 			return true;
 		}
 		
@@ -376,7 +370,16 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		return false;
 	}
 
-	
+	private boolean search(Node root,K key) {
+        if (root == null) {
+            return false;
+        } else if (root.key.compareTo(key) == 0) {
+            return true;
+        } else if (root.key.compareTo(key)> 0) {
+            return search(root.left, key);
+        }
+        return search(root.right, key);
+    }
 	/**
 	 * @return true if the specified key is in this DefaultMap
 	 * @throws IllegalArgumentException if the key is null
@@ -384,13 +387,12 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	
 	@Override
 	public boolean containsKey(K key) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		if(key == null) {
 			throw new IllegalArgumentException("key is null");
 		}
 		
-		
-		return get(key) != null;
+		boolean inBST = search(this.root,key);
+		return inBST;
 	}
 
 	// Keys must be in ascending sorted order
@@ -411,6 +413,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		  inOrder(node.left,l);
 		  l.add(node.key);
 		  inOrder(node.right,l);
+
 		 }
 	
 	@Override
@@ -420,7 +423,6 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		ArrayList<K> list = new ArrayList<>();
 		inOrder(this.root,list);
 	
-		
 		return list;
 	}
 	private static class Node<K extends Comparable<? super K>, V> 
