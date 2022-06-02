@@ -50,19 +50,27 @@ public class FileSystem {
         FileData value = new FileData(name, dir, date);
 
 
-        //if file is present
+        //if file is present in system
         if (nameTree.containsKey(name)) {
             String originalDate = nameTree.get(name).lastModifiedDate;
             int comp = date.compareTo(originalDate);
             //if more recent
             if (comp > 0) {
+                //replace file in nameTree
                 nameTree.replace(name,value);
-                dateTree.remove(originalDate);
-                //if already exist same date
+                //delete original file in date Tree
+                for (FileData data:dateTree.get(originalDate)) {
+                    if (data.name.equals(name)) {
+                        dateTree.get(originalDate).remove(data);
+                    }
+                }
+                //if file date exists already, update that entry
                 if (dateTree.containsKey(date)) {
                     ArrayList<FileData> existVal = dateTree.get(date);
                     existVal.add(value);
+                    dateTree.replace(date,existVal);
                 }
+                //if first time adding this date
                 else {
                     ArrayList<FileData> Val = new ArrayList<>();
                     Val.add(value);
@@ -72,21 +80,32 @@ public class FileSystem {
             else {
                 return;
             }
-
         }
-        //if file not present
+        //if file not present in system
         else  {
             nameTree.put(name,value);
-            ArrayList<FileData> Val = new ArrayList<>();
-            Val.add(value);
-            dateTree.put(date,Val);
+            //if file date exists already, update that entry
+            if (dateTree.containsKey(date)) {
+                ArrayList<FileData> existVal = dateTree.get(date);
+                existVal.add(value);
+                dateTree.replace(date,existVal);
+            }
+            //if first time adding this date
+            else {
+                ArrayList<FileData> Val = new ArrayList<>();
+                Val.add(value);
+                dateTree.put(date,Val);
+            }
         }
+
+
+    }
 
 
 
 
     	
-    }
+
 
 
     // TODO
