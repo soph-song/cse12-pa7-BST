@@ -35,7 +35,8 @@ public class BSTTest {
 		bst.put("c",null);
 		bst.put("d",null);
 
-		bst.remove("b");
+		assertEquals(true, bst.containsKey("b"));
+		assertEquals(true,bst.remove("b"));
 		System.out.println(bst.keys().toString());
 		//assertEquals(,bst.keys().toString())
 

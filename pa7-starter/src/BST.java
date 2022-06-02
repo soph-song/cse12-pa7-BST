@@ -391,6 +391,16 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		return false;
 	}
 
+	private boolean search(Node root,K key) {
+        if (root == null) {
+            return false;
+        } else if (root.key.compareTo(key) == 0) {
+            return true;
+        } else if (root.key.compareTo(key)> 0) {
+            return search(root.left, key);
+        }
+        return search(root.right, key);
+    }
 	
 	/**
 	 * @return true if the specified key is in this DefaultMap
@@ -403,9 +413,8 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		if(key == null) {
 			throw new IllegalArgumentException("key is null");
 		}
-		
-		
-		return get(key) != null;
+		boolean inBST = search(this.root,key);
+		return inBST;
 	}
 
 	// Keys must be in ascending sorted order
