@@ -156,17 +156,15 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	 */
 	
 	private Node<K, V> nodeWithMinimumKey(Node<K, V> root){ 
-    	Node<K, V> minimum = root; 
         while (root.left != null){ 
-            minimum = root.left; 
             root = root.left; 
         } 
-        return minimum; 
+        return root; 
     }
 	
 	private Node<K, V> removeHelper(Node<K, V> node, K key) throws IllegalArgumentException{
 		// If tree is empty
-		if (node == null) { return null; }
+		if (node == null) { return node; }
   
 		if (node.key.compareTo(key) > 0) {
 			
@@ -195,37 +193,54 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 			if (size == 1) {
 				this.root = null;
 			}
-			//if root with child
-			if (size == 2 || size == 3) {
-				if (node.right != null) {
-					this.root = new Node(node.right.key,node.right.value,root.left,node.right.right);
-					return root;
+
+			// Case: no children
+			if (node.left == null && node.right == null) {
+				if (node != this.root) {
+					return null;
 				}
 				else {
-					this.root = new Node(node.left.key,node.left.value,node.left.left,node.left.right);
+					this.root = null;
+					return null;
+				}
+
+			}
+			// Case: node with two children
+			else if (node.left != null && node.right != null) {
+				// Get minimum from right subtree, then remove it
+				Node<K, V> succesor = nodeWithMinimumKey(node.right);
+				K Succkey = succesor.key;
+				V Succvalue = succesor.value;
+				// Remove successor
+				node.right = removeHelper(node, succesor.key);		
+				//update the node with succesor info
+				node.key = Succkey;
+				node.value = Succvalue;		
+			}
+
+			//Cse: one right child
+			else if (node.left == null){
+				if (node != this.root) {
+					return node.right;
+				}
+				else {
+					this.root = node.right;
+					return root;
+				}
+
+			}
+			//Case: one left child
+			else if (node.right == null){ 
+				if (node != this.root) {
+					return node.left;
+				}
+				else {
+					this.root = node.left;
 					return root;
 				}
 			}
-		// Case: node with only one child or no children
-			if (node.left == null && node.right == null) {
-				return null;
-			}
-			else if (node.left == null){
-				return node.right;
-			}
-		
-			else if (node.right == null){ 
-				return node.left;
-			}
 
-		// Case: node with two children
-		// Get minimum from right subtree, then remove it
-			Node<K, V> nextLargest = nodeWithMinimumKey(node.right); //see method in our posted source code  node.key = nextLargest.key;
-			node.key = nextLargest.key;
-			node.value = nextLargest.value;
 
-		// Remove nextLargest node
-			node.right = removeHelper(node.right, node.key);
 			}
 			return node;
 		}
@@ -405,13 +420,13 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 	
 	
 	private void inOrder(Node<K,V> node, List l){
-		  if(node==null) {
-		   return;
+		  if(node !=null) {
+			inOrder(node.left,l);
+			l.add(node.key);
+			inOrder(node.right,l);
 		  }
-		  inOrder(node.left,l);
-		  l.add(node.key);
-		  inOrder(node.right,l);
-		 }
+
+	}
 	
 	@Override
 	public List<K> keys() {
