@@ -45,10 +45,10 @@ public class BSTTest {
 	@Test
 	public void test() {
 		BST bst = new BST<Integer,Integer>();
-		bst.put(25,null);
-		bst.put(20,null);
-		bst.put(24,null);
-		bst.put(23,null);
+		bst.put(25,1);
+		bst.put(20,4);
+		bst.put(24,1);
+		bst.put(23,1);
 
 		assertEquals(true,bst.remove(25));
 		System.out.println(bst.keys().toString());

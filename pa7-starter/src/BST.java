@@ -333,19 +333,27 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 		}
 		
 		Node<K,V> cur = this.root;
+
 		
 		 while(cur != null) {
+
 				if(key.compareTo(cur.key) > 0) {
-					if(cur.right == null) {     
+
+
+					if(cur.right == null) {    
+						System.out.println("null"); 
 						break;
 					}
 					
 					else {
+						System.out.println(cur.right.getKey());
 						cur = cur.right;
 					}
+
+					
 				}
 				
-				if(key.compareTo(cur.key) < 0) {
+				else if(key.compareTo(cur.key) < 0) {
 					if(cur.left == null) {
 						break;
 					}
@@ -358,7 +366,7 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 				else {
 					return cur.value;
 				}
-			
+
 		 }
 		return null;
 	}
