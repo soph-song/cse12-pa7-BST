@@ -41,4 +41,17 @@ public class BSTTest {
 		//assertEquals(,bst.keys().toString())
 
 	}
+
+	@Test
+	public void test() {
+		BST bst = new BST<>();
+		bst.put("b",null);
+		bst.put("a",null);
+
+		assertEquals(true,bst.remove("b"));
+		System.out.println(bst.keys().toString());
+		System.out.println(bst.get("b"));
+		//assertEquals(,bst.keys().toString())
+
+	}
 }
