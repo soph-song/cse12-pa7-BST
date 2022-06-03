@@ -341,12 +341,10 @@ public class BST<K extends Comparable<? super K>, V> implements DefaultMap<K, V>
 
 
 					if(cur.right == null) {    
-						System.out.println("null"); 
 						break;
 					}
 					
 					else {
-						System.out.println(cur.right.getKey());
 						cur = cur.right;
 					}
 
