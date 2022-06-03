@@ -44,13 +44,15 @@ public class BSTTest {
 
 	@Test
 	public void test() {
-		BST bst = new BST<>();
-		bst.put("b",null);
-		bst.put("a",null);
+		BST bst = new BST<Integer,Integer>();
+		bst.put(25,null);
+		bst.put(20,null);
+		bst.put(24,null);
+		bst.put(23,null);
 
-		assertEquals(true,bst.remove("b"));
+		assertEquals(true,bst.remove(25));
 		System.out.println(bst.keys().toString());
-		System.out.println(bst.get("b"));
+		System.out.println(bst.get(25));
 		//assertEquals(,bst.keys().toString())
 
 	}
